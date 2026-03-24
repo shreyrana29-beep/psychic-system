@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luminary — EdTech Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ========================
+     SIDEBAR
+     ======================== -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">L</div>
+    <span class="logo-text">Luminary</span>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Main</div>
+    <a class="nav-item active" href="#">
+      <span class="nav-icon">⊞</span> Dashboard
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">🎓</span> My Courses
+      <span class="nav-badge">3</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">✦</span> Explore
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◈</span> Assignments
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◉</span> Progress
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Community</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◎</span> Leaderboard
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⬡</span> Study Groups
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◷</span> Live Sessions
+      <span class="nav-badge">2</span>
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Account</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⚙</span> Settings
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◍</span> Help
+    </a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-pill">
+      <div class="avatar">AK</div>
+      <div class="user-info">
+        <div class="name">Aryan Kumar</div>
+        <div class="role">Pro Student</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ========================
+     MAIN CONTENT
+     ======================== -->
+<main class="main">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="page-title">Good morning, <span>Aryan</span> 👋</div>
+    <div class="topbar-right">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" placeholder="Search courses, topics…">
+      </div>
+      <div class="icon-btn" id="notif-btn">
+        🔔<span class="dot"></span>
+      </div>
+      <div class="icon-btn">⚡</div>
+    </div>
+  </div>
+
+  <!-- STATS GRID — populated by app.js -->
+  <div class="stats-grid"></div>
+
+  <!-- MID ROW -->
+  <div class="mid-grid">
+
+    <!-- Learning Activity Chart -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Learning Activity</div>
+        <span class="card-action">Last 7 weeks ▾</span>
+      </div>
+      <div class="chart-container">
+        <div class="chart-bars"><!-- filled by app.js --></div>
+      </div>
+      <div class="chart-labels"><!-- filled by app.js --></div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--accent2)"></div>
+          Hours studied
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:rgba(91,138,244,0.3)"></div>
+          Assignments done
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Students Leaderboard -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Top Students</div>
+        <span class="card-action">View all</span>
+      </div>
+      <div class="leaderboard"><!-- filled by app.js --></div>
+    </div>
+
+  </div><!-- /mid-grid -->
+
+  <!-- BOTTOM GRID -->
+  <div class="bottom-grid">
+
+    <!-- In Progress Courses -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">In Progress</div>
+        <span class="card-action">All courses</span>
+      </div>
+      <div class="course-list"><!-- filled by app.js --></div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Recent Activity</div>
+        <span class="card-action">See all</span>
+      </div>
+      <div class="activity-feed"><!-- filled by app.js --></div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Upcoming</div>
+        <span class="card-action">Calendar</span>
+      </div>
+      <div class="upcoming-list"><!-- filled by app.js --></div>
+    </div>
+
+  </div><!-- /bottom-grid -->
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
