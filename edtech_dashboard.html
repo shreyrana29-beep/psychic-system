@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luminary — EdTech Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e2a;
+    --border: rgba(255,255,255,0.07);
+    --accent: #e8c547;
+    --accent2: #5b8af4;
+    --accent3: #f4755b;
+    --text: #eeeaf4;
+    --muted: #6b7280;
+    --green: #4ade80;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(91,138,244,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 400px at 90% 80%, rgba(232,197,71,0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px;
+    min-height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 0;
+    position: fixed;
+    z-index: 10;
+  }
+
+  .logo {
+    padding: 0 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 34px; height: 34px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: #0d0f14;
+  }
+
+  .logo-text {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  .nav-section {
+    padding: 0 12px;
+    margin-bottom: 4px;
+  }
+
+  .nav-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 12px 8px;
+    margin-top: 20px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.18s;
+    text-decoration: none;
+  }
+
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+
+  .nav-item.active {
+    background: rgba(232,197,71,0.12);
+    color: var(--accent);
+  }
+
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--accent3);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 20px;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 12px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.18s;
+  }
+  .user-pill:hover { background: var(--surface2); }
+
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .user-info .name { font-size: 13px; font-weight: 500; }
+  .user-info .role { font-size: 11px; color: var(--muted); }
+
+  /* MAIN */
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    padding: 32px 36px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+
+  .page-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+
+  .page-title span { color: var(--accent); font-style: italic; }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .search-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.18s;
+  }
+  .search-box:hover { border-color: rgba(255,255,255,0.15); }
+  .search-box input {
+    background: none; border: none; outline: none;
+    color: var(--text); font-family: 'DM Sans', sans-serif;
+    font-size: 13px; width: 160px;
+  }
+  .search-box input::placeholder { color: var(--muted); }
+
+  .icon-btn {
+    width: 38px; height: 38px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.18s;
+    position: relative;
+  }
+  .icon-btn:hover { background: var(--surface2); border-color: rgba(255,255,255,0.15); }
+  .icon-btn .dot {
+    position: absolute;
+    top: 7px; right: 7px;
+    width: 7px; height: 7px;
+    background: var(--accent3);
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+  }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+    animation: fadeUp 0.5s both;
+  }
+  .stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .stat-card:nth-child(2) { animation-delay: 0.1s; }
+  .stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .stat-card:nth-child(4) { animation-delay: 0.2s; }
+
+  .stat-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.13); }
+
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    opacity: 0.06;
+  }
+  .stat-card.c1::after { background: var(--accent); }
+  .stat-card.c2::after { background: var(--accent2); }
+  .stat-card.c3::after { background: var(--accent3); }
+  .stat-card.c4::after { background: var(--green); }
+
+  .stat-icon {
+    font-size: 20px;
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 14px;
+  }
+  .c1 .stat-icon { background: rgba(232,197,71,0.12); }
+  .c2 .stat-icon { background: rgba(91,138,244,0.12); }
+  .c3 .stat-icon { background: rgba(244,117,91,0.12); }
+  .c4 .stat-icon { background: rgba(74,222,128,0.12); }
+
+  .stat-value {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .stat-label { font-size: 13px; color: var(--muted); }
+
+  .stat-change {
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .stat-change.up { color: var(--green); }
+  .stat-change.down { color: var(--accent3); }
+
+  /* MIDDLE ROW */
+  .mid-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    animation: fadeUp 0.5s 0.25s both;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+  }
+
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  .card-action {
+    font-size: 12px;
+    color: var(--accent2);
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .card-action:hover { text-decoration: underline; }
+
+  /* CHART */
+  .chart-container { position: relative; height: 180px; }
+
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 100%;
+  }
+
+  .bar-group { flex: 1; display: flex; gap: 4px; align-items: flex-end; }
+
+  .bar {
+    flex: 1;
+    border-radius: 4px 4px 0 0;
+    transition: opacity 0.2s;
+    position: relative;
+    cursor: pointer;
+  }
+  .bar:hover { opacity: 0.8; }
+
+  .bar.primary { background: var(--accent2); }
+  .bar.secondary { background: rgba(91,138,244,0.25); }
+
+  .chart-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  .chart-label { font-size: 11px; color: var(--muted); flex: 1; text-align: center; }
+
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  /* LEADERBOARD */
+  .leaderboard { }
+  .lb-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .lb-item:last-child { border-bottom: none; }
+
+  .lb-rank {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--muted);
+    width: 20px;
+    text-align: center;
+  }
+  .lb-rank.gold { color: var(--accent); }
+  .lb-rank.silver { color: #9ca3af; }
+  .lb-rank.bronze { color: #b87333; }
+
+  .lb-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .lb-info { flex: 1; }
+  .lb-name { font-size: 13px; font-weight: 500; }
+  .lb-course { font-size: 11px; color: var(--muted); }
+
+  .lb-score {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .lb-bar-wrap {
+    width: 60px;
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 5px;
+  }
+  .lb-bar-fill { height: 100%; border-radius: 4px; background: var(--accent); }
+
+  /* BOTTOM GRID */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* COURSE CARDS */
+  .course-card {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.18s;
+    border: 1px solid transparent;
+  }
+  .course-card:hover { border-color: var(--border); background: #1f2435; }
+
+  .course-thumb {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .course-info { flex: 1; min-width: 0; }
+  .course-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .course-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .progress-wrap {
+    height: 3px;
+    background: var(--border);
+    border-radius: 4px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .progress-fill { height: 100%; border-radius: 4px; }
+
+  /* ACTIVITY FEED */
+  .activity-item {
+    display: flex;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .activity-item:last-child { border-bottom: none; }
+
+  .act-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .act-text { font-size: 13px; line-height: 1.4; }
+  .act-text strong { font-weight: 500; }
+  .act-time { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* UPCOMING */
+  .upcoming-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .upcoming-item:last-child { border-bottom: none; }
+
+  .upcoming-date {
+    width: 40px; height: 40px;
+    background: var(--surface2);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .upcoming-date .day {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .upcoming-date .month { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .upcoming-info { flex: 1; }
+  .upcoming-name { font-size: 13px; font-weight: 500; }
+  .upcoming-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .upcoming-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+  .tag-live { background: rgba(244,117,91,0.15); color: var(--accent3); }
+  .tag-quiz { background: rgba(91,138,244,0.15); color: var(--accent2); }
+  .tag-assign { background: rgba(232,197,71,0.15); color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">L</div>
+    <span class="logo-text">Luminary</span>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Main</div>
+    <a class="nav-item active" href="#">
+      <span class="nav-icon">⊞</span> Dashboard
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">🎓</span> My Courses
+      <span class="nav-badge">3</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">✦</span> Explore
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◈</span> Assignments
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◉</span> Progress
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Community</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◎</span> Leaderboard
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⬡</span> Study Groups
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◷</span> Live Sessions
+      <span class="nav-badge">2</span>
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Account</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">⚙</span> Settings
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">◍</span> Help
+    </a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-pill">
+      <div class="avatar">AK</div>
+      <div class="user-info">
+        <div class="name">Aryan Kumar</div>
+        <div class="role">Pro Student</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="page-title">Good morning, <span>Aryan</span> 👋</div>
+    <div class="topbar-right">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" placeholder="Search courses, topics...">
+      </div>
+      <div class="icon-btn">🔔<span class="dot"></span></div>
+      <div class="icon-btn">⚡</div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card c1">
+      <div class="stat-icon">🎓</div>
+      <div class="stat-value">12</div>
+      <div class="stat-label">Courses Enrolled</div>
+      <div class="stat-change up">↑ 2 this month</div>
+    </div>
+    <div class="stat-card c2">
+      <div class="stat-icon">⏱</div>
+      <div class="stat-value">84h</div>
+      <div class="stat-label">Hours Learned</div>
+      <div class="stat-change up">↑ 12% vs last month</div>
+    </div>
+    <div class="stat-card c3">
+      <div class="stat-icon">🏆</div>
+      <div class="stat-value">#7</div>
+      <div class="stat-label">Leaderboard Rank</div>
+      <div class="stat-change up">↑ Moved up 3 spots</div>
+    </div>
+    <div class="stat-card c4">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-value">24</div>
+      <div class="stat-label">Day Streak</div>
+      <div class="stat-change up">Personal best!</div>
+    </div>
+  </div>
+
+  <!-- MID ROW -->
+  <div class="mid-grid">
+    <!-- Chart -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Learning Activity</div>
+        <span class="card-action">Last 7 weeks ▾</span>
+      </div>
+      <div class="chart-container">
+        <div class="chart-bars">
+          <div class="bar-group">
+            <div class="bar primary" style="height:55%"></div>
+            <div class="bar secondary" style="height:40%"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar primary" style="height:70%"></div>
+            <div class="bar secondary" style="height:55%"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar primary" style="height:48%"></div>
+            <div class="bar secondary" style="height:35%"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar primary" style="height:82%"></div>
+            <div class="bar secondary" style="height:60%"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar primary" style="height:65%"></div>
+            <div class="bar secondary" style="height:48%"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar primary" style="height:90%"></div>
+            <div class="bar secondary" style="height:70%"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar primary" style="height:75%"></div>
+            <div class="bar secondary" style="height:55%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-labels">
+        <div class="chart-label">Wk 1</div>
+        <div class="chart-label">Wk 2</div>
+        <div class="chart-label">Wk 3</div>
+        <div class="chart-label">Wk 4</div>
+        <div class="chart-label">Wk 5</div>
+        <div class="chart-label">Wk 6</div>
+        <div class="chart-label">Wk 7</div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div> Hours studied</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(91,138,244,0.3)"></div> Assignments done</div>
+      </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="card" style="animation-delay:0.3s">
+      <div class="card-header">
+        <div class="card-title">Top Students</div>
+        <span class="card-action">View all</span>
+      </div>
+      <div class="leaderboard">
+        <div class="lb-item">
+          <span class="lb-rank gold">1</span>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,#f472b6,#ec4899)">PR</div>
+          <div class="lb-info">
+            <div class="lb-name">Priya Rao</div>
+            <div class="lb-bar-wrap"><div class="lb-bar-fill" style="width:97%"></div></div>
+          </div>
+          <div class="lb-score">9,720</div>
+        </div>
+        <div class="lb-item">
+          <span class="lb-rank silver">2</span>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,#34d399,#10b981)">RK</div>
+          <div class="lb-info">
+            <div class="lb-name">Rahul Khan</div>
+            <div class="lb-bar-wrap"><div class="lb-bar-fill" style="width:89%"></div></div>
+          </div>
+          <div class="lb-score">8,940</div>
+        </div>
+        <div class="lb-item">
+          <span class="lb-rank bronze">3</span>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,#fb923c,#f97316)">SM</div>
+          <div class="lb-info">
+            <div class="lb-name">Sneha Mehta</div>
+            <div class="lb-bar-wrap"><div class="lb-bar-fill" style="width:82%"></div></div>
+          </div>
+          <div class="lb-score">8,210</div>
+        </div>
+        <div class="lb-item">
+          <span class="lb-rank">4</span>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,#818cf8,#6366f1)">VT</div>
+          <div class="lb-info">
+            <div class="lb-name">Vikram T.</div>
+            <div class="lb-bar-wrap"><div class="lb-bar-fill" style="width:76%;background:var(--accent2)"></div></div>
+          </div>
+          <div class="lb-score">7,680</div>
+        </div>
+        <div class="lb-item" style="background:rgba(232,197,71,0.05);border-radius:8px;padding:10px 8px;margin:4px -4px;border:none">
+          <span class="lb-rank" style="color:var(--accent)">7</span>
+          <div class="lb-avatar" style="background:linear-gradient(135deg,var(--accent2),var(--accent))">AK</div>
+          <div class="lb-info">
+            <div class="lb-name" style="color:var(--accent)">You</div>
+            <div class="lb-bar-wrap"><div class="lb-bar-fill" style="width:65%;background:var(--accent)"></div></div>
+          </div>
+          <div class="lb-score" style="color:var(--accent)">6,500</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM ROW -->
+  <div class="bottom-grid">
+    <!-- Courses -->
+    <div class="card" style="animation-delay:0.35s">
+      <div class="card-header">
+        <div class="card-title">In Progress</div>
+        <span class="card-action">All courses</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div class="course-card">
+          <div class="course-thumb" style="background:rgba(91,138,244,0.12)">🐍</div>
+          <div class="course-info">
+            <div class="course-name">Python for Data Science</div>
+            <div class="course-meta">68% complete · 4h left</div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:68%;background:var(--accent2)"></div></div>
+          </div>
+        </div>
+        <div class="course-card">
+          <div class="course-thumb" style="background:rgba(232,197,71,0.12)">📐</div>
+          <div class="course-info">
+            <div class="course-name">Linear Algebra Masterclass</div>
+            <div class="course-meta">42% complete · 9h left</div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:42%;background:var(--accent)"></div></div>
+          </div>
+        </div>
+        <div class="course-card">
+          <div class="course-thumb" style="background:rgba(244,117,91,0.12)">⚛️</div>
+          <div class="course-info">
+            <div class="course-name">React Advanced Patterns</div>
+            <div class="course-meta">85% complete · 1h left</div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:85%;background:var(--accent3)"></div></div>
+          </div>
+        </div>
+        <div class="course-card">
+          <div class="course-thumb" style="background:rgba(74,222,128,0.12)">🧠</div>
+          <div class="course-info">
+            <div class="course-name">ML Fundamentals</div>
+            <div class="course-meta">19% complete · 21h left</div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:19%;background:var(--green)"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity -->
+    <div class="card" style="animation-delay:0.4s">
+      <div class="card-header">
+        <div class="card-title">Recent Activity</div>
+        <span class="card-action">See all</span>
+      </div>
+      <div>
+        <div class="activity-item">
+          <div class="act-icon" style="background:rgba(74,222,128,0.1)">✅</div>
+          <div>
+            <div class="act-text">Completed <strong>Module 7</strong> in Python for Data Science</div>
+            <div class="act-time">2 hours ago</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon" style="background:rgba(232,197,71,0.1)">🏆</div>
+          <div>
+            <div class="act-text">Earned <strong>"Problem Solver"</strong> badge</div>
+            <div class="act-time">Yesterday, 4:30 PM</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon" style="background:rgba(91,138,244,0.1)">📝</div>
+          <div>
+            <div class="act-text">Submitted <strong>Assignment 4</strong> — Linear Algebra</div>
+            <div class="act-time">Yesterday, 2:15 PM</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon" style="background:rgba(244,117,91,0.1)">🎥</div>
+          <div>
+            <div class="act-text">Attended live session: <strong>React Hooks Deep Dive</strong></div>
+            <div class="act-time">2 days ago</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon" style="background:rgba(232,197,71,0.1)">⭐</div>
+          <div>
+            <div class="act-text">Scored <strong>94/100</strong> on ML Concepts Quiz</div>
+            <div class="act-time">3 days ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming -->
+    <div class="card" style="animation-delay:0.45s">
+      <div class="card-header">
+        <div class="card-title">Upcoming</div>
+        <span class="card-action">Calendar</span>
+      </div>
+      <div>
+        <div class="upcoming-item">
+          <div class="upcoming-date">
+            <span class="day">25</span>
+            <span class="month">Mar</span>
+          </div>
+          <div class="upcoming-info">
+            <div class="upcoming-name">Python Live Session</div>
+            <div class="upcoming-sub">7:00 PM · Dr. Anita Sharma</div>
+          </div>
+          <span class="upcoming-tag tag-live">LIVE</span>
+        </div>
+        <div class="upcoming-item">
+          <div class="upcoming-date">
+            <span class="day">26</span>
+            <span class="month">Mar</span>
+          </div>
+          <div class="upcoming-info">
+            <div class="upcoming-name">Algebra Mid-term Quiz</div>
+            <div class="upcoming-sub">10:00 AM · 45 mins</div>
+          </div>
+          <span class="upcoming-tag tag-quiz">QUIZ</span>
+        </div>
+        <div class="upcoming-item">
+          <div class="upcoming-date">
+            <span class="day">28</span>
+            <span class="month">Mar</span>
+          </div>
+          <div class="upcoming-info">
+            <div class="upcoming-name">React Project Submission</div>
+            <div class="upcoming-sub">Due by 11:59 PM</div>
+          </div>
+          <span class="upcoming-tag tag-assign">DUE</span>
+        </div>
+        <div class="upcoming-item">
+          <div class="upcoming-date">
+            <span class="day">01</span>
+            <span class="month">Apr</span>
+          </div>
+          <div class="upcoming-info">
+            <div class="upcoming-name">ML Study Group</div>
+            <div class="upcoming-sub">6:00 PM · 12 members</div>
+          </div>
+          <span class="upcoming-tag tag-live">LIVE</span>
+        </div>
+        <div class="upcoming-item">
+          <div class="upcoming-date">
+            <span class="day">03</span>
+            <span class="month">Apr</span>
+          </div>
+          <div class="upcoming-info">
+            <div class="upcoming-name">Capstone Proposal</div>
+            <div class="upcoming-sub">Due by 5:00 PM</div>
+          </div>
+          <span class="upcoming-tag tag-assign">DUE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
